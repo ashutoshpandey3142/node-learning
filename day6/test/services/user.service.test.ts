@@ -111,6 +111,28 @@ describe('UserService', () => {
     });
 
     describe('updateUser', () => {
+        const existingUser: any = {
+            id: "123",
+            name: "Test User",
+            email: "test@example.com",
+            password: "oldPassword123"
+        };
+        
+        const updateUser: any = {
+            email: "test@example.com",
+            id: "123",
+            name: "Test User",
+            password: "newPassword123",
+        };
+        it('should update user password', async () => {
+            const userId = '123';
+            const newPassword = 'newPassword123';
+            existingUser.update = sinon.stub().resolves({ ...existingUser, password: newPassword });
+            updateUser.update = sinon.stub().resolves({ ...existingUser, password: newPassword });
+            User.findByPk = sinon.stub().returns(Promise.resolve(existingUser));
+            await UserService.updateUser(userId, updateUser);
+            expect(existingUser.update.calledOnce).to.be.true;
+        });
 
         it('should throw a 404 GlobalError if user not found', async () => {
             User.findByPk = sinon.stub().resolves(null);
