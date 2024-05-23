@@ -30,13 +30,15 @@ jobs:
         with:
           path: ${{ github.workspace }}/day6/node_modules # Change the path to the node_modules folder.
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package.json') }}
-
+    
+      - name: install typescript
+        run: npm i typescript
       - name: Install the dependencies
         if: steps.cache-nodemodules.outputs.cache-hit != 'true'
         run: npm install --legacy-peer-deps
 
       - name: Test and coverage
-        run: npm run test:coverage
+        run: npm run coverage
 
       - name: SonarCloud Scan
         with:
